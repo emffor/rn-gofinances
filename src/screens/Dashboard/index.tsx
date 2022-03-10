@@ -13,6 +13,8 @@ import {
   UserName,
   Icon,
   HighlightCards,
+  Transactions,
+  Title
 } from './styles';
 
 
@@ -65,6 +67,10 @@ export function Dashboard(){
 
 
     </HighlightCards>
+
+    <Transactions>
+       <Title>Listagem</Title>
+    </Transactions>
         
     </Container>
   );
