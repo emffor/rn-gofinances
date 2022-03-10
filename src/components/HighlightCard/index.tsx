@@ -10,7 +10,17 @@ import {
   LastTransaction,
  } from './styles';
 
-export function HighlightCard(){
+ interface Props {
+   title: string;
+   amount: string;
+   lastTransaction: string;
+ }
+
+export function HighlightCard({ 
+    title, 
+    amount, 
+    lastTransaction 
+}: Props){
   return (
     <Container>
        <Header>
