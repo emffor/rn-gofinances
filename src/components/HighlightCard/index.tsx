@@ -14,24 +14,38 @@ import {
    title: string;
    amount: string;
    lastTransaction: string;
+   //usando opções no recurso do TypeScript
+   type: 'up' | 'down' | 'total';
+ }
+
+ //esse objeto serve pra auxiliar o item do type
+ const icon = {
+   up: 'arrow-up-circle',
+   down: 'arrow-down-circle',
+   total: 'dollar-sign'
  }
 
 export function HighlightCard({ 
+    type,
     title, 
     amount, 
     lastTransaction 
 }: Props){
   return (
-    <Container>
+    <Container type={type}>
        <Header>
-         <Title>Entrada</Title>
-         <Icon name="arrow-up-circle"/>
+         <Title type={type}>{title}</Title>
+         {/* 
+            acessando o tipo do cartao com o objeto auxiliar 
+            o type criado depois é para acessar pelo styled components
+         */}
+         <Icon name={icon[type]} type={type}/>
 
        </Header>
 
        <Footer>
-        <Amount>R$ 17.400,00</Amount>
-        <LastTransaction>Última entrada dia 13 de abril</LastTransaction>
+        <Amount type={type}>{amount}</Amount>
+        <LastTransaction type={type}>{lastTransaction}</LastTransaction>
       </Footer>
 
     </Container>
