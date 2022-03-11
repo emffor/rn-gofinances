@@ -1,7 +1,11 @@
 import styled from 'styled-components/native';
+import { FlatList } from 'react-native';
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 import { Feather } from '@expo/vector-icons';
-import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import { getBottomSpace, getStatusBarHeight } from 'react-native-iphone-x-helper';
+
+import { DataListProps } from '.';
+import React from 'react';
 
 export const Container = styled.View`
     flex: 1;
@@ -94,3 +98,12 @@ export const Title = styled.Text`
 
     margin-bottom: 16px;
 `;
+
+//envolvendo a Flatlist pq vou criar um typagem personalizada.
+//FlatList as new () => FlatList<DataListProps> 
+export const TransactionList = styled(FlatList).attrs({
+    showsVerticalScrollIndicator: false,
+    contentContainerStyle:{
+      paddingBottom:  getBottomSpace()
+    }
+})`` as React.ComponentType as new <DataListProps>() => FlatList<DataListProps>;
