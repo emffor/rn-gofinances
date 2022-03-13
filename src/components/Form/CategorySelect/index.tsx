@@ -5,11 +5,9 @@ import {
     Container,
     Category,
     Icon,
-
-
 } from './styles';
 
-interface Props extends TouchableOpacityProps {
+interface Props {
     title: string;
 }
 
