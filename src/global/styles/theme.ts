@@ -1,6 +1,7 @@
 export default {
     colors:{
         primary: '#5636D3',
+        // primary: '#830ad1',
     
         secondary: '#FF872C',
         secondary_light: 'rgba(255, 135, 44, 0.3)', //(a) no final é pra mexer com opacity
