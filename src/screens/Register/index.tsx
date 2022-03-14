@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Modal } from 'react-native';
+import { Modal, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useForm } from "react-hook-form";
 
 import { Button } from '../../components/Form/Button';
@@ -34,12 +34,7 @@ export function Register(){
       name: 'Categoria',
   });
 
-  //desestruturar o estado 
-  //control(assina formulário) //handleSubmit funcao q pega todos valorese envia em uma unica vez
-  const {
-    control, 
-    handleSubmit 
-  } = useForm();
+
 
   //estado dos inputs
   const [name, setName] = useState('');
@@ -57,8 +52,13 @@ export function Register(){
     setCategoryModalOpen(false);
   }
 
+  //desestruturar o estado 
+  //control(assina formulário) //handleSubmit função q pega todos valores envia em uma unica vez.
 
-
+  const {
+    control, 
+    handleSubmit 
+  } = useForm();
 
   function handleRegister(form: FormData) {
     const data = {
@@ -89,8 +89,13 @@ export function Register(){
   //   console.log(text);
   // }
 
+  // <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+  // FAZ COM O QUE AO CLICAR EM QUALQUER PARTE DA TELA ELE FECHE O TECLADO
+
   return (
+  <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
     <Container>
+      
         <Header>
             <Title>
                 Cadastro
@@ -99,26 +104,29 @@ export function Register(){
 
     <Form>
        <Fields>
-              {/* <Input 
+               {/* <Input 
                 placeholder='Nome'
                 onChangeText={setName}
-              /> */}
+              /> 
 
-              {/* <Input 
+               <Input 
                 placeholder='Preço'
                 onChangeText={setAmount}
-              />   */}
-              {/* ESSE INPUTFORM É USADO COM HOOK FORM PARA CONTROLE */}
+              />   
+               ESSE INPUTFORM É USADO COM HOOK FORM PARA CONTROLE  */}
               <InputForm 
                 name='name'
                 control={control} //como q ele vai identificar
                 placeholder="Nome"
+                autoCapitalize='sentences' //primeira letra maiúscula
+                autoCorrect={false}
               />
 
               <InputForm 
                 name='amount'
                 control={control} //como q ele vai identificar
                 placeholder="Preço"
+                keyboardType={'numeric'}
               />
 
               <TransactionsTypes>
@@ -159,8 +167,8 @@ export function Register(){
               />
 
             </Modal>
-
       </Form>
     </Container>
+    </TouchableWithoutFeedback>
   );
 }
