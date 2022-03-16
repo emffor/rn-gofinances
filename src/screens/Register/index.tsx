@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 
 import { Button } from '../../components/Form/Button';
 import { CategorySelectButton } from '../../components/Form/CategorySelectButton';
-import { Input } from '../../components/Form/Input';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { InputForm } from '../../components/Form/InputForm';
 import { TransactionTypeButton } from '../../components/Form/TransactionTypeButton';
 
@@ -87,7 +87,7 @@ export function Register(){
     resolver: yupResolver(schema)
   });
 
-  function handleRegister(form: FormData) {
+  async function handleRegister(form: FormData) {
     //! significa se nao tiver nada !transactionType
     if (!transactionType)
       return Alert.alert('Selecione o tipo da transação');
@@ -95,14 +95,24 @@ export function Register(){
      if (category.key === 'category')
       return Alert.alert('Selecione a categoria');
     
-
     const data = {
       name: form.name, 
       amount: form.amount,
       transactionType,
       category: category.key
     }
-    console.log(data);
+    
+    //1- passa uma chave / 2- passa a coleção @nomedoapp / 3- passa a chave pro AsyncStorage no setItem(chave, passa objeto convertido pra texto com JSON.stringify
+    try {
+      const dataKey = '@gofinances:transactions';
+      await AsyncStorage.setItem(dataKey, JSON.stringify(data)); 
+
+
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Não foi possível salvar");
+      
+    }
   }
 
   //PODE USAR ESSA DE BAIXO
@@ -139,7 +149,7 @@ export function Register(){
 
     <Form>
        <Fields>
-               ESSE INPUTFORM É USADO COM HOOK FORM PARA CONTROLE  */}
+          {/*ESSE INPUTFORM É USADO COM HOOK FORM PARA CONTROLE  */}
               <InputForm 
                 name='name'
                 control={control} //como q ele vai identificar
