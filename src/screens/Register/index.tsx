@@ -1,19 +1,20 @@
 import React, {useState, useEffect} from 'react';
+import { useForm } from "react-hook-form";
+
 import { 
   Modal, 
   TouchableWithoutFeedback, 
   Keyboard,
   Alert,
 } from 'react-native';
-import { useForm } from "react-hook-form";
 
-import { Button } from '../../components/Form/Button';
 import { CategorySelectButton } from '../../components/Form/CategorySelectButton';
+import { CategorySelect } from '../CategorySelect';
+import { Button } from '../../components/Form/Button';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { InputForm } from '../../components/Form/InputForm';
 import { TransactionTypeButton } from '../../components/Form/TransactionTypeButton';
-
-import { CategorySelect } from '../CategorySelect';
 
 import {
     Container,
@@ -24,10 +25,10 @@ import {
     TransactionsTypes
 } from './styles';
 
-//importando tudo com q tem dentro de Yup // Validação
+//importando tudo com q tem dentro de Yup // Validação.
+
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
-
 interface FormData {
   name: string;
   amount: string;
@@ -36,6 +37,7 @@ interface FormData {
 //Nome é obrigatório
 //name: Yup.vaiSerUmaString().tipoVaiSerObrigatário('message)
 //amount: Yup.TemQSerUmNumber().CasoErroDeTipo(message)
+
 const schema = Yup.object().shape({
   name: Yup
   .string()
@@ -58,8 +60,6 @@ export function Register(){
       key: 'category',
       name: 'Categoria',
   });
-
-
 
   //estado dos inputs
   const [name, setName] = useState('');
@@ -108,6 +108,7 @@ export function Register(){
     //currentData - se tem alguma coisa em (data) então eu vou converter caso nao tenha nada eu devolvo um vetor[] vazio.
     //dataFormatted usando o despejando todos os dados salvos no momento mais o novo dado.
     //mudança de código para que os itens nao sobrescreva o código.
+
     try {
       const data = await AsyncStorage.getItem(dataKey);
       const currentData = data ? JSON.parse(data) : [];
@@ -178,9 +179,9 @@ export function Register(){
             </Title>
         </Header>
 
+      {/*ESSE INPUTFORM É USADO COM HOOK FORM PARA CONTROLE  */}
     <Form>
        <Fields>
-          {/*ESSE INPUTFORM É USADO COM HOOK FORM PARA CONTROLE  */}
               <InputForm 
                 name='name'
                 control={control} //como q ele vai identificar
