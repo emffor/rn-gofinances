@@ -5,16 +5,18 @@ import { TextInputProps } from 'react-native';
 import { Input } from '../Input';
 
 import {
-Container
+    Container,
+    Error,
 } from './styles';
 
 interface Props extends TextInputProps {
     control: Control;
     name: string;
+    error: string;
 }
 
 export function InputForm({
-    control, name, ...rest
+    control, name, error, ...rest
 }: Props){
   return (
     <Container>
@@ -31,7 +33,10 @@ export function InputForm({
                //sera renderizado como input controlado.
             name={name}
         />
-           
+          {/* so aparecera se tiver error / se tem error &&(entao) mostra o componente de error */}
+          {
+              error && <Error>{ error }</Error>
+          }
         
         
     </Container>

@@ -17,6 +17,7 @@ import {
   Transactions,
   Title,
   TransactionList,
+  LogoutButton,
 } from './styles';
 
 //criada para usar na listagem no keyExtractor / o export para o styCompon
@@ -78,7 +79,10 @@ export function Dashboard() {
 
           </UserInfo>
 
-          <Icon name='power' />
+        <LogoutButton onPress={() => {}}>
+            <Icon name='power' />
+
+        </LogoutButton>
 
         </UserWrapper>
 
