@@ -97,7 +97,7 @@ export function Register(){
      if (category.key === 'category')
       return Alert.alert('Selecione a categoria');
     
-    const data = {
+    const newTransaction = {
       name: form.name, 
       amount: form.amount,
       transactionType,
@@ -105,28 +105,45 @@ export function Register(){
     }
     
     //1- passa uma chave / 2- passa a coleção @nomedoapp / 3- passa a chave pro AsyncStorage no setItem(chave, passa objeto convertido pra texto com JSON.stringify
+    //currentData - se tem alguma coisa em (data) então eu vou converter caso nao tenha nada eu devolvo um vetor[] vazio.
+    //dataFormatted usando o despejando todos os dados salvos no momento mais o novo dado.
+    //mudança de código para que os itens nao sobrescreva o código.
     try {
-      await AsyncStorage.setItem(dataKey, JSON.stringify(data)); 
+      const data = await AsyncStorage.getItem(dataKey);
+      const currentData = data ? JSON.parse(data) : [];
+      
+      //um array de objetos
+      const dataFormatted = [
+        ...currentData,
+        newTransaction
+      ];
 
+      await AsyncStorage.setItem(dataKey, JSON.stringify(dataFormatted)); 
 
     } catch (error) {
       console.log(error);
       Alert.alert("Não foi possível salvar");
-      
     }
   }
 
   //useEffect- não consigo dizer q useEffect é uma função async então cria uma funçãozinha ex: loadData. getItem(da onde pegar as transações) por isso chave é importando para resgatar e pra pegar.
-  
+
   //JSON.parse(data!) faz o contrario de JSON.stringify e o data! - a ! é um recurso do TypeScript que basicamente diz que pode confiar que sempre vai ter alguma nesse data
 
   useEffect(() => {
-    async function loadData(){
-     const data = await AsyncStorage.getItem(dataKey);
-     console.log(JSON.parse(data!)); 
-    }
+     async function loadData(){
+      const data = await AsyncStorage.getItem(dataKey);
+      console.log(JSON.parse(data!)); 
+     }
 
-    loadData()
+     loadData()
+
+
+     //FUNÇÃO PARA LIMPAR UMA COLEÇÃO DO ASYNC STORAGE
+     /* async function removeAll() {
+       await AsyncStorage.removeItem(dataKey);
+     } 
+     removeAll(); */
   },[]);
 
   //PODE USAR ESSA DE BAIXO
