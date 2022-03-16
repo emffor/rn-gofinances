@@ -139,15 +139,6 @@ export function Register(){
 
     <Form>
        <Fields>
-               {/* <Input 
-                placeholder='Nome'
-                onChangeText={setName}
-              /> 
-
-               <Input 
-                placeholder='Preço'
-                onChangeText={setAmount}
-              />   
                ESSE INPUTFORM É USADO COM HOOK FORM PARA CONTROLE  */}
               <InputForm 
                 name='name'
