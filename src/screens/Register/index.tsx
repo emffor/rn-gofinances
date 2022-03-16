@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { 
   Modal, 
   TouchableWithoutFeedback, 
@@ -48,6 +48,8 @@ const schema = Yup.object().shape({
 })
 
 export function Register(){
+
+  const dataKey = '@gofinances:transactions'; //chave do AsyncStorage
   //se esse botao tiver selecionado vai ter o fundo e remove a borda.
   const [transactionType, setTransactionType] = useState('');
 
@@ -104,7 +106,6 @@ export function Register(){
     
     //1- passa uma chave / 2- passa a coleção @nomedoapp / 3- passa a chave pro AsyncStorage no setItem(chave, passa objeto convertido pra texto com JSON.stringify
     try {
-      const dataKey = '@gofinances:transactions';
       await AsyncStorage.setItem(dataKey, JSON.stringify(data)); 
 
 
@@ -114,6 +115,19 @@ export function Register(){
       
     }
   }
+
+  //useEffect- não consigo dizer q useEffect é uma função async então cria uma funçãozinha ex: loadData. getItem(da onde pegar as transações) por isso chave é importando para resgatar e pra pegar.
+  
+  //JSON.parse(data!) faz o contrario de JSON.stringify e o data! - a ! é um recurso do TypeScript que basicamente diz que pode confiar que sempre vai ter alguma nesse data
+
+  useEffect(() => {
+    async function loadData(){
+     const data = await AsyncStorage.getItem(dataKey);
+     console.log(JSON.parse(data!)); 
+    }
+
+    loadData()
+  },[]);
 
   //PODE USAR ESSA DE BAIXO
   // function handleRegister() {
