@@ -1,4 +1,5 @@
 import React from 'react';
+import { categories } from '../../utils/categories';
 
 import {
 Container,
@@ -11,16 +12,12 @@ CategoryName,
 Date,
 } from './styles';
 
-interface CategoryProps {
-    name: string;
-    icon: string;
-}
 //diminuindo o código com data
 export interface TransactionCardProps {
     type: 'positive' | 'negative'; 
-    title: string;
+    name: string;
     amount: string;
-    category: CategoryProps;
+    category: string; //pegar so a key
     date: string;
 }
 
@@ -30,10 +27,14 @@ interface Props {
 
 
 
-export function TransactionCard({ data } : Props){ 
+export function TransactionCard({ data } : Props){
+//Vou percorrer cada item, só que quero pegar o item q é a === key é igual ao meu date.category. [0] -> primeira posição da listagem.
+    const category = categories.filter(
+        item => item.key === data.category
+    )[0];
   return (
     <Container>
-        <Title>{data.title}</Title>
+        <Title>{data.name}</Title>
         <Amount type={data.type}>
             {/* se o data.type for 'negative' acrescenta um sinal de - */}
             { data.type === 'negative' && '- '}
@@ -42,8 +43,8 @@ export function TransactionCard({ data } : Props){
 
         <Footer>
             <Category>
-                <Icon name= {data.category.icon}/>
-                <CategoryName>{data.category.name}</CategoryName>
+                <Icon name= {category.icon}/>
+                <CategoryName>{category.name}</CategoryName>
             </Category>
             <Date>{data.date}</Date>
         </Footer>

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { useForm } from "react-hook-form";
 import { useNavigation } from '@react-navigation/native';
 
@@ -86,7 +86,7 @@ export function Register(){
 
   //desestruturar o estado 
   //control(assina formulário) //handleSubmit função q pega todos valores envia em uma unica vez.
-  const dataKey = '@gofinances:transactions';
+  
   const {
     control, 
     handleSubmit,
@@ -121,6 +121,7 @@ export function Register(){
     try {
        //chave do AsyncStorage
       //se esse botão tiver selecionado vai ter o fundo e remove a borda.
+      const dataKey = '@gofinances:transactions';
       const data = await AsyncStorage.getItem(dataKey);
       const currentData = data ? JSON.parse(data) : [];
       
@@ -129,7 +130,7 @@ export function Register(){
         ...currentData,
         newTransaction
       ];
-
+      
       await AsyncStorage.setItem(dataKey, JSON.stringify(dataFormatted)); 
 
       reset();
@@ -148,14 +149,14 @@ export function Register(){
   }
 
   //função remove dados da lista
-  useEffect(() => {
-    //FUNÇÃO PARA LIMPAR UMA COLEÇÃO DO ASYNC STORAGE
-    // async function removeAll() {
-    //   await AsyncStorage.removeItem(dataKey);
-    // } 
+  //   useEffect(() => {
+  //     //FUNÇÃO PARA LIMPAR UMA COLEÇÃO DO ASYNC STORAGE
+  //     // async function removeAll() {
+  //     //   await AsyncStorage.removeItem(dataKey);
+  //     // } 
 
-    // removeAll(); 
- },[]);
+  //     // removeAll(); 
+  //  },[]);
 
 
   return (
