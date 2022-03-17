@@ -150,25 +150,6 @@ export function Register(){
     }
   }
 
-  //PODE USAR ESSA DE BAIXO
-  // function handleRegister() {
-  //   // como se a gente tivesse enviando esses dados para serem salvos no device
-  //   const data = {
-  //     name, 
-  //     amount,
-  //     transactionType,
-  //     category: category.key
-  //   }
-  //   // console.log(name, amount);
-  //   console.log(data);
-  // }
-
-  // TESTE de CONSOLE //função que verifica que muda conteúdo.
-  // //usa assim: onChangeText={text => handleInputChange(text)}
-  // function handleInputChange(text: string){
-  //   console.log(text);
-  // }
-
   // <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
   // FAZ COM O QUE AO CLICAR EM QUALQUER PARTE DA TELA ELE FECHE O TECLADO
 
