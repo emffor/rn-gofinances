@@ -57,9 +57,6 @@ const schema = Yup.object().shape({
 })
 
 export function Register(){
-
-  const dataKey = '@gofinances:transactions'; //chave do AsyncStorage
-  //se esse botao tiver selecionado vai ter o fundo e remove a borda.
   const [transactionType, setTransactionType] = useState('');
 
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
@@ -89,7 +86,7 @@ export function Register(){
 
   //desestruturar o estado 
   //control(assina formulário) //handleSubmit função q pega todos valores envia em uma unica vez.
-
+  const dataKey = '@gofinances:transactions';
   const {
     control, 
     handleSubmit,
@@ -101,6 +98,7 @@ export function Register(){
   });
 
   async function handleRegister(form: FormData) {
+
     //! significa se nao tiver nada !transactionType
     if (!transactionType)
       return Alert.alert('Selecione o tipo da transação');
@@ -119,11 +117,10 @@ export function Register(){
     }
     
     //1- passa uma chave / 2- passa a coleção @nomedoapp / 3- passa a chave pro AsyncStorage no setItem(chave, passa objeto convertido pra texto com JSON.stringify
-    //currentData - se tem alguma coisa em (data) então eu vou converter caso nao tenha nada eu devolvo um vetor[] vazio.
-    //dataFormatted usando o despejando todos os dados salvos no momento mais o novo dado.
-    //mudança de código para que os itens nao sobrescreva o código.
 
     try {
+       //chave do AsyncStorage
+      //se esse botão tiver selecionado vai ter o fundo e remove a borda.
       const data = await AsyncStorage.getItem(dataKey);
       const currentData = data ? JSON.parse(data) : [];
       
@@ -150,8 +147,16 @@ export function Register(){
     }
   }
 
-  // <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-  // FAZ COM O QUE AO CLICAR EM QUALQUER PARTE DA TELA ELE FECHE O TECLADO
+  //função remove dados da lista
+  useEffect(() => {
+    //FUNÇÃO PARA LIMPAR UMA COLEÇÃO DO ASYNC STORAGE
+    // async function removeAll() {
+    //   await AsyncStorage.removeItem(dataKey);
+    // } 
+
+    // removeAll(); 
+ },[]);
+
 
   return (
   <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
