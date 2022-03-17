@@ -1,5 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { useFocusEffect } from '@react-navigation/native';
+
 import { HighlightCard } from '../../components/HighlightCard';
 import { TransactionCard, TransactionCardProps } from '../../components/TransactionCard';
 
@@ -67,13 +70,21 @@ export function Dashboard() {
     });
 
     setData(transactionsFormatted); //Alterando o as formatações.
-
+    console.log(transactionsFormatted);
   }
 
   //deixar vazio o [] pq ira carregar uma unica vez.
   useEffect(() => {
     loadTransactions();
+    /* //FUNÇÃO PARA LIMPAR UMA COLEÇÃO DO ASYNC STORAGE - 2º FORMA DE REMOVER.
+    const dataKey = '@gofinances:transactions';
+    AsyncStorage.removeItem(dataKey); */
   }, []);
+
+  /* Passando a função, precisa dizer pra aplicação que quando voltar pra tela tal ele recarregue a 'listagem' ou qualquer outra pagina que queira. Dispara a função. useCallback vai cuidar pra q n tenha renders desnecessário. */
+  useFocusEffect(useCallback(() =>{
+    loadTransactions();
+  },[]));
 
   return (
     <Container>

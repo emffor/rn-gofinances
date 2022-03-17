@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useForm } from "react-hook-form";
 import { useNavigation } from '@react-navigation/native';
 
@@ -72,7 +72,7 @@ export function Register(){
   const [name, setName] = useState('');
   const [amount, setAmount] = useState('');
 
-  function handleTransactionTypeSelect(type: 'up' | 'down'){
+  function handleTransactionTypeSelect(type: 'positive' | 'negative'){
     setTransactionType(type)
   }
 
@@ -111,13 +111,13 @@ export function Register(){
       id: String(uuid.v4()),
       name: form.name, 
       amount: form.amount,
-      transactionType,
+      type: transactionType,
       category: category.key,
       date: new Date(),
     }
     
     //1- passa uma chave / 2- passa a coleção @nomedoapp / 3- passa a chave pro AsyncStorage no setItem(chave, passa objeto convertido pra texto com JSON.stringify
-
+    
     try {
        //chave do AsyncStorage
       //se esse botão tiver selecionado vai ter o fundo e remove a borda.
@@ -148,15 +148,14 @@ export function Register(){
     }
   }
 
-  //função remove dados da lista
-  //   useEffect(() => {
-  //     //FUNÇÃO PARA LIMPAR UMA COLEÇÃO DO ASYNC STORAGE
-  //     // async function removeAll() {
-  //     //   await AsyncStorage.removeItem(dataKey);
-  //     // } 
+  //FUNÇÃO PARA LIMPAR UMA COLEÇÃO DO ASYNC STORAGE
+/*      useEffect(() => {
+        async function removeAll() {
+          await AsyncStorage.removeItem(dataKey);
+        } 
 
-  //     // removeAll(); 
-  //  },[]);
+        removeAll(); 
+    },[]); */
 
 
   return (
@@ -192,14 +191,14 @@ export function Register(){
               <TransactionsTypes>
                 <TransactionTypeButton 
                   title='Income' type='up'
-                  onPress={() => handleTransactionTypeSelect('up')}
+                  onPress={() => handleTransactionTypeSelect('positive')}
                   //estou fazendo comparação ai esse retorno é verdadeiro ou falso.
-                  isActive={transactionType === 'up'} 
+                  isActive={transactionType === 'positive'} 
                 />
                 <TransactionTypeButton 
                   title='Outcome' type='down' 
-                  onPress={() => handleTransactionTypeSelect('down')} 
-                  isActive={transactionType === 'down'}
+                  onPress={() => handleTransactionTypeSelect('negative')} 
+                  isActive={transactionType === 'negative'}
                 />
               </TransactionsTypes>
               
