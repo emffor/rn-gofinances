@@ -161,7 +161,9 @@ export function Dashboard() {
           type='up'
           title='Entradas'
           amount={highLightData?.entries?.amount}
-          // amount={highLightData.entries.amount} assim da erro
+          /* link da correção: https://app.rocketseat.com.br/node/async-storage/group/async-storage/lesson/lidando-com-o-carregamento-assincrono */
+          // amount={highLightData.entries.amount} assim da erro que é o normal
+          //esse interrogação é o indicador de loading ' ?.' em uso do asyncStorage
           lastTransaction='Última entrada dia 13 de abril'
         />
 
@@ -191,10 +193,7 @@ export function Dashboard() {
         />
 
         {/* <TransactionCard data={data[0]}/>  tinha q ser passado com esse zero pq tem q pegar o primeiro objeto*/}
-
-
       </Transactions>
-
     </Container>
   );
 }
