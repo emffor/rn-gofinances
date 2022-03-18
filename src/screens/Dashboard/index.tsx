@@ -28,8 +28,19 @@ export interface DataListProps extends TransactionCardProps {
   id: string;
 }
 
+interface highLightProps {
+  amount: string;
+}
+interface highLightData {
+  entries: highLightProps,
+  expensives: highLightProps,
+  total: highLightProps
+}
+
 export function Dashboard() {
-  const [ data, setData ] = useState<DataListProps[]>([]);
+  const [transactions, setTransactions ] = useState<DataListProps[]>([]);
+  const [highLightData, sethighLightCard] = 
+  useState<highLightData>({} as highLightData);
 
   //percorrer transações para poder fazer a formatação nela.
   async function loadTransactions() {
@@ -37,12 +48,22 @@ export function Dashboard() {
     const response = await AsyncStorage.getItem(dataKey);
     const transactions = response ? JSON.parse(response) : [];
 
+    let entriesTotal = 0;
+    let expensiveTotal = 0;
 
     /* 
+    
       O retorno da transação sera um q é um vetor DataListProps[] e percorrer cada item e também vou tipar o item é um DataListProps e no final de tudo vou devolver uma lista de DataListProps. (usado para formatação de data, mas usado para uma moeda.)
     */
     const transactionsFormatted: DataListProps[] = transactions
     .map((item: DataListProps) =>{
+      //soma do total.
+      if(item.type === 'positive') {
+        entriesTotal += Number(item.amount); //incrementa item + total.
+      } else {
+        expensiveTotal -= Number(item.amount);
+      }
+
       const amount = Number(item.amount).toLocaleString('pt-BR', {
         style: 'currency', //moeda,
         currency: 'BRL'
@@ -69,7 +90,29 @@ export function Dashboard() {
       }
     });
 
-    setData(transactionsFormatted); //Alterando o as formatações.
+    setTransactions(transactionsFormatted); 
+    const total = entriesTotal + expensiveTotal;
+    //Alterando o as formatações.
+    sethighLightCard({
+      entries: {
+        amount: entriesTotal.toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL'
+        })
+      },
+      expensives:{
+        amount: expensiveTotal.toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL'
+        })
+      },
+      total: {
+        amount: total.toLocaleString('pt-BR', {
+          style: 'currency',
+          currency: 'BRL'
+        })
+      }
+    });
     console.log(transactionsFormatted);
   }
 
@@ -117,24 +160,24 @@ export function Dashboard() {
         <HighlightCard
           type='up'
           title='Entradas'
-          amount='R$ 17.400,00'
+          amount={highLightData?.entries?.amount}
+          // amount={highLightData.entries.amount} assim da erro
           lastTransaction='Última entrada dia 13 de abril'
         />
 
         <HighlightCard
           type='down'
           title='Saídas'
-          amount='R$ 1.259,00'
+          amount={highLightData?.expensives?.amount}
           lastTransaction='Última saída dia 03 de abril'
         />
 
         <HighlightCard
           type='total'
           title='Total'
-          amount='R$ 16.141,00'
+          amount={highLightData?.total?.amount}
           lastTransaction='01 à 16 de abril'
         />
-
 
       </HighlightCards>
 
@@ -142,7 +185,7 @@ export function Dashboard() {
         <Title>Listagem</Title>
 
         <TransactionList
-          data={data}
+          data={transactions}
           keyExtractor={item => item.id}
           renderItem={({ item }) => <TransactionCard data={item} />}
         />
