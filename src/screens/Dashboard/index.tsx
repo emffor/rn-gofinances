@@ -86,6 +86,41 @@ export function Dashboard() {
     });
 
     setTransactions(transactionsFormatted); 
+    //Filtro das transações de entrada
+    //tipando (transaction : DataListProps)
+    //da data quero pegar o times temp com .getTime() retorna um numero que representa a data. dai eu vou ter uma lista com numeração e para pegar a maior data é a transação mais recente então é o maior numero
+
+    //primeiro usa o filtro só os positivos e depois percorre as transações que
+    //transforma data em numero new Date(transaction.date).getTime()
+    //Math.max.apply(Math, pega o maior numero.  
+    const lastTransactionEntries = Math.max.apply(Math, 
+      
+      transactions
+      .filter((transaction : DataListProps) => transaction.type === 'positive')
+      .map((transaction : DataListProps) => new Date(transaction.date).getTime())
+      
+      )
+
+    //processo contrario transformando em uma data de novo.
+    console.log(new Date(lastTransactionEntries));
+
+
+/*     //testando funções JavaScript
+    const plus = [1,2,4,6,50,70,5,9,41];
+    console.log('vetor mais: ' + plus);
+    //filtra numero por par ou ímpar
+    const filterPlus = plus.filter( filterItem => filterItem && filterItem % 2 == 0);
+    console.log(filterPlus)
+    //percorre o vetor inteiro imprimindo tudo q tem no vetor
+    const mapPlus = filterPlus.map( mapPlus => mapPlus && mapPlus * 2 )
+    console.log('map: ' + mapPlus);
+    //mostra o maior numero da função.
+    const result = Math.max.apply(Math, plus);
+    console.log('Pega o maior numero: ' + result); */
+    
+    
+
+
     const total = entriesTotal + expensiveTotal;
     sethighLightCard({
       entries: {
