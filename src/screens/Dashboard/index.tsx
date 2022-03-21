@@ -119,7 +119,8 @@ export function Dashboard() {
   //deixar vazio o [] pq ira carregar uma unica vez.
   useEffect(() => {
     loadTransactions();
-    /* //FUNÇÃO PARA LIMPAR UMA COLEÇÃO DO ASYNC STORAGE - 2º FORMA DE REMOVER.
+    
+    /* //FUNÇÃO PARA LIMPAR UMA COLEÇÃO DO ASYNC STORAGE - 2º FORMA DE REMOVER. é so descomentar
     const dataKey = '@gofinances:transactions';
     AsyncStorage.removeItem(dataKey); */
   }, []);
