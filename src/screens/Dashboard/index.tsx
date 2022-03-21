@@ -158,6 +158,7 @@ export function Dashboard() {
 
       <HighlightCards>
 
+        {/* SIGNIFICA QUE NAO DEU TEMPO CARREGAR OS DADOS DO ASYNC STORAGE NO MOMENTO QUE A INTERFACE FOR EXIBIDA. link de correção abaixo. */}
         <HighlightCard
           type='up'
           title='Entradas'
