@@ -27,11 +27,9 @@ import {
   LoadContainer
 } from './styles';
 
-//criada para usar na listagem no keyExtractor / o export para o styCompon
 export interface DataListProps extends TransactionCardProps {
   id: string;
 }
-
 interface highLightProps {
   amount: string;
 }
@@ -58,13 +56,8 @@ export function Dashboard() {
     let entriesTotal = 0;
     let expensiveTotal = 0;
 
-    /* 
-    
-      O retorno da transação sera um q é um vetor DataListProps[] e percorrer cada item e também vou tipar o item é um DataListProps e no final de tudo vou devolver uma lista de DataListProps. (usado para formatação de data, mas usado para uma moeda.)
-    */
     const transactionsFormatted: DataListProps[] = transactions
     .map((item: DataListProps) =>{
-      //soma do total.
       if(item.type === 'positive') {
         entriesTotal += Number(item.amount); //incrementa item + total.
       } else {
@@ -75,11 +68,6 @@ export function Dashboard() {
         style: 'currency', //moeda,
         currency: 'BRL'
       });
-
-      // const date = new Date(item.date)
-      // .toLocaleString('pt-BR', {
-      //   timeZone: 'UTC' 
-      // }); outra forma de formatar data. da mesma abaixo.
       
       const date = Intl.DateTimeFormat('pt-BR', {
           day: '2-digit',
@@ -90,7 +78,7 @@ export function Dashboard() {
       return {
         id: item.id,
         name: item.name,
-        amount: amount, //pode usar o o amount, igual no date sem usar date: date
+        amount: amount, 
         type: item.type, 
         category: item.category,
         date, 
@@ -99,7 +87,6 @@ export function Dashboard() {
 
     setTransactions(transactionsFormatted); 
     const total = entriesTotal + expensiveTotal;
-    //Alterando o as formatações.
     sethighLightCard({
       entries: {
         amount: entriesTotal.toLocaleString('pt-BR', {
@@ -121,19 +108,17 @@ export function Dashboard() {
       }
     });
     //ver as lista atuais no console. console.log(transactionsFormatted)
-    setIsLoading(false); //carregamento do isLoading a bolinha.
+    setIsLoading(false);
   }
 
-  //deixar vazio o [] pq ira carregar uma unica vez.
   useEffect(() => {
     loadTransactions();
     
-    /* //FUNÇÃO PARA LIMPAR UMA COLEÇÃO DO ASYNC STORAGE - 2º FORMA DE REMOVER. é so descomentar
+    /* //REMOVER LISTA ATUAL - obs: descomentar
     const dataKey = '@gofinances:transactions';
     AsyncStorage.removeItem(dataKey); */
   }, []);
 
-  /* Passando a função, precisa dizer pra aplicação que quando voltar pra tela tal ele recarregue a 'listagem' ou qualquer outra pagina que queira. Dispara a função. useCallback vai cuidar pra q n tenha renders desnecessário. */
   useFocusEffect(useCallback(() =>{
     loadTransactions();
   },[]));
@@ -174,8 +159,6 @@ export function Dashboard() {
         </Header>
 
         <HighlightCards>
-        {/* undefined HighlightData.entries.amount */}
-        {/*remoção do highLightData?.entries?.amount => pq agora tem adição do isLoading*/}
           <HighlightCard
             type='up'
             title='Entradas'
@@ -207,8 +190,6 @@ export function Dashboard() {
             keyExtractor={item => item.id}
             renderItem={({ item }) => <TransactionCard data={item} />}
           />
-
-          {/* <TransactionCard data={data[0]}/>  tinha q ser passado com esse zero pq tem q pegar o primeiro objeto*/}
         </Transactions>
       </>
       }

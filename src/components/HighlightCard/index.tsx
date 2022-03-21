@@ -35,12 +35,7 @@ export function HighlightCard({
     <Container type={type}>
        <Header>
          <Title type={type}>{title}</Title>
-         {/* 
-            acessando o tipo do cartao com o objeto auxiliar 
-            o type criado depois é para acessar pelo styled components
-         */}
          <Icon name={icon[type]} type={type}/>
-
        </Header>
 
        <Footer>

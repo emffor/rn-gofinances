@@ -18,7 +18,6 @@ import { InputForm } from '../../components/Form/InputForm';
 import uuid from 'react-native-uuid';
 import { TransactionTypeButton } from '../../components/Form/TransactionTypeButton';
 
-
 import {
     Container,
     Header,
@@ -27,8 +26,6 @@ import {
     Fields,
     TransactionsTypes
 } from './styles';
-
-//importando tudo com q tem dentro de Yup // Validação.
 
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -41,9 +38,6 @@ type NavigationProps = {
   navigate: (screen:string) => void;
 }
 
-//Nome é obrigatório
-//name: Yup.vaiSerUmaString().tipoVaiSerObrigatário('message)
-//amount: Yup.TemQSerUmNumber().CasoErroDeTipo(message)
 
 const schema = Yup.object().shape({
   name: Yup
@@ -65,8 +59,8 @@ export function Register(){
       name: 'Categoria',
   });
 
-  //tipado para evitar erro de tipagem
-  const navigation = useNavigation<NavigationProps>();
+  
+  const navigation = useNavigation<NavigationProps>(); 
 
   //estado dos inputs
   const [name, setName] = useState('');
@@ -84,9 +78,6 @@ export function Register(){
     setCategoryModalOpen(false);
   }
 
-  //desestruturar o estado 
-  //control(assina formulário) //handleSubmit função q pega todos valores envia em uma unica vez.
-  
   const {
     control, 
     handleSubmit,
@@ -98,15 +89,12 @@ export function Register(){
   });
 
   async function handleRegister(form: FormData) {
-
-    //! significa se nao tiver nada !transactionType
     if (!transactionType)
       return Alert.alert('Selecione o tipo da transação');
       
      if (category.key === 'category')
       return Alert.alert('Selecione a categoria');
-    
-    //id é gerado pelo back - mas não como ñ tem.... usa o uidd
+
     const newTransaction = {
       id: String(uuid.v4()),
       name: form.name, 
@@ -116,11 +104,7 @@ export function Register(){
       date: new Date(),
     }
     
-    //1- passa uma chave / 2- passa a coleção @nomedoapp / 3- passa a chave pro AsyncStorage no setItem(chave, passa objeto convertido pra texto com JSON.stringify
-    
     try {
-       //chave do AsyncStorage
-      //se esse botão tiver selecionado vai ter o fundo e remove a borda.
       const dataKey = '@gofinances:transactions';
       const data = await AsyncStorage.getItem(dataKey);
       const currentData = data ? JSON.parse(data) : [];
@@ -153,7 +137,6 @@ export function Register(){
         async function removeAll() {
           await AsyncStorage.removeItem(dataKey);
         } 
-
         removeAll(); 
     },[]); */
 
@@ -168,12 +151,11 @@ export function Register(){
             </Title>
         </Header>
 
-      {/*ESSE INPUTFORM É USADO COM HOOK FORM PARA CONTROLE  */}
     <Form>
        <Fields>
               <InputForm 
                 name='name'
-                control={control} //como q ele vai identificar
+                control={control} 
                 placeholder="Nome"
                 autoCapitalize='sentences' //primeira letra maiúscula
                 autoCorrect={false}
@@ -192,7 +174,6 @@ export function Register(){
                 <TransactionTypeButton 
                   title='Income' type='up'
                   onPress={() => handleTransactionTypeSelect('positive')}
-                  //estou fazendo comparação ai esse retorno é verdadeiro ou falso.
                   isActive={transactionType === 'positive'} 
                 />
                 <TransactionTypeButton 
@@ -201,8 +182,7 @@ export function Register(){
                   isActive={transactionType === 'negative'}
                 />
               </TransactionsTypes>
-              
-              {/* seleção da categoria */}
+
               <CategorySelectButton 
                   title={category.name} 
                   onPress={handleOpenSelectCategoryModal}
