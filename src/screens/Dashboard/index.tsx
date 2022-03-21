@@ -1,10 +1,13 @@
 import React, {useCallback, useEffect, useState} from 'react';
+import { ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { useFocusEffect } from '@react-navigation/native';
 
 import { HighlightCard } from '../../components/HighlightCard';
 import { TransactionCard, TransactionCardProps } from '../../components/TransactionCard';
+
+import { useTheme } from 'styled-components';
 
 import {
   Container,
@@ -21,6 +24,7 @@ import {
   Title,
   TransactionList,
   LogoutButton,
+  LoadContainer
 } from './styles';
 
 //criada para usar na listagem no keyExtractor / o export para o styCompon
@@ -38,9 +42,12 @@ interface highLightData {
 }
 
 export function Dashboard() {
+  const [isLoading, setIsLoading] = useState(true);
   const [transactions, setTransactions ] = useState<DataListProps[]>([]);
   const [highLightData, sethighLightCard] = 
   useState<highLightData>({} as highLightData);
+
+  const theme = useTheme();
 
   //percorrer transações para poder fazer a formatação nela.
   async function loadTransactions() {
@@ -113,7 +120,8 @@ export function Dashboard() {
         })
       }
     });
-    console.log(transactionsFormatted);
+    //ver as lista atuais no console. console.log(transactionsFormatted)
+    setIsLoading(false); //carregamento do isLoading a bolinha.
   }
 
   //deixar vazio o [] pq ira carregar uma unica vez.
@@ -132,70 +140,78 @@ export function Dashboard() {
 
   return (
     <Container>
-      <Header>
-        <UserWrapper>
+      {
+        isLoading ? 
+        <LoadContainer>
+          <ActivityIndicator 
+            color={theme.colors.primary}
+            size='large'
+          />
+        </LoadContainer> :
+      <>
+        <Header>
+          <UserWrapper>
 
-          <UserInfo>
-            <Photo
-              source={{ uri: 'https://github.com/emffor.png' }}
-            />
+            <UserInfo>
+              <Photo
+                source={{ uri: 'https://github.com/emffor.png' }}
+              />
 
-            <User>
-              <UserGreeting>Olá, </UserGreeting>
-              <UserName>Rodrigo, </UserName>
-            </User>
+              <User>
+                <UserGreeting>Olá, </UserGreeting>
+                <UserName>Rodrigo, </UserName>
+              </User>
 
-          </UserInfo>
+            </UserInfo>
 
-        <LogoutButton onPress={() => {}}>
-            <Icon name='power' />
+          <LogoutButton onPress={() => {}}>
+              <Icon name='power' />
 
-        </LogoutButton>
+          </LogoutButton>
 
-        </UserWrapper>
+          </UserWrapper>
 
-      </Header>
+        </Header>
 
-      <HighlightCards>
+        <HighlightCards>
+        {/* undefined HighlightData.entries.amount */}
+        {/*remoção do highLightData?.entries?.amount => pq agora tem adição do isLoading*/}
+          <HighlightCard
+            type='up'
+            title='Entradas'
+            amount={highLightData.entries.amount}
+            lastTransaction='Última entrada dia 13 de abril'
+          />
 
-        {/* SIGNIFICA QUE NAO DEU TEMPO CARREGAR OS DADOS DO ASYNC STORAGE NO MOMENTO QUE A INTERFACE FOR EXIBIDA. link de correção abaixo. */}
-        <HighlightCard
-          type='up'
-          title='Entradas'
-          amount={highLightData?.entries?.amount}
-          /* link da correção: https://app.rocketseat.com.br/node/async-storage/group/async-storage/lesson/lidando-com-o-carregamento-assincrono */
-          // amount={highLightData.entries.amount} assim da erro que é o normal
-          //esse interrogação é o indicador de loading ' ?.' em uso do asyncStorage
-          lastTransaction='Última entrada dia 13 de abril'
-        />
+          <HighlightCard
+            type='down'
+            title='Saídas'
+            amount={highLightData.expensives.amount}
+            lastTransaction='Última saída dia 03 de abril'
+          />
 
-        <HighlightCard
-          type='down'
-          title='Saídas'
-          amount={highLightData?.expensives?.amount}
-          lastTransaction='Última saída dia 03 de abril'
-        />
+          <HighlightCard
+            type='total'
+            title='Total'
+            amount={highLightData.total.amount}
+            lastTransaction='01 à 16 de abril'
+          />
 
-        <HighlightCard
-          type='total'
-          title='Total'
-          amount={highLightData?.total?.amount}
-          lastTransaction='01 à 16 de abril'
-        />
+        </HighlightCards>
 
-      </HighlightCards>
+        <Transactions>
+          <Title>Listagem</Title>
 
-      <Transactions>
-        <Title>Listagem</Title>
+          <TransactionList
+            data={transactions}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) => <TransactionCard data={item} />}
+          />
 
-        <TransactionList
-          data={transactions}
-          keyExtractor={item => item.id}
-          renderItem={({ item }) => <TransactionCard data={item} />}
-        />
-
-        {/* <TransactionCard data={data[0]}/>  tinha q ser passado com esse zero pq tem q pegar o primeiro objeto*/}
-      </Transactions>
+          {/* <TransactionCard data={data[0]}/>  tinha q ser passado com esse zero pq tem q pegar o primeiro objeto*/}
+        </Transactions>
+      </>
+      }
     </Container>
   );
 }
