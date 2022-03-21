@@ -32,6 +32,7 @@ export interface DataListProps extends TransactionCardProps {
 }
 interface highLightProps {
   amount: string;
+  lastTransaction: string; 
 }
 interface highLightData {
   entries: highLightProps,
@@ -46,6 +47,21 @@ export function Dashboard() {
   useState<highLightData>({} as highLightData);
 
   const theme = useTheme();
+
+  //transformando em função data maior e rest...
+  function getLastTransactionDate(
+      collection: DataListProps[], 
+      type: 'positive' | 'negative'
+    ){   
+      const lastTransaction = new Date(
+      Math.max.apply(Math, collection
+      .filter(transaction => transaction.type === type)
+      .map(transaction => new Date(transaction.date).getTime())));
+      
+      //formatando a data
+      return `${lastTransaction.getDate()} de ${lastTransaction.toLocaleString('pt-BR', {month: 'long'})}`
+  }
+
 
   //percorrer transações para poder fazer a formatação nela.
   async function loadTransactions() {
@@ -86,25 +102,11 @@ export function Dashboard() {
     });
 
     setTransactions(transactionsFormatted); 
-    //Filtro das transações de entrada
-    //tipando (transaction : DataListProps)
-    //da data quero pegar o times temp com .getTime() retorna um numero que representa a data. dai eu vou ter uma lista com numeração e para pegar a maior data é a transação mais recente então é o maior numero
 
-    //primeiro usa o filtro só os positivos e depois percorre as transações que
-    //transforma data em numero new Date(transaction.date).getTime()
-    //Math.max.apply(Math, pega o maior numero.  
-    const lastTransactionEntries = Math.max.apply(Math, 
-      
-      transactions
-      .filter((transaction : DataListProps) => transaction.type === 'positive')
-      .map((transaction : DataListProps) => new Date(transaction.date).getTime())
-      
-      )
-
-    //processo contrario transformando em uma data de novo.
-    console.log(new Date(lastTransactionEntries));
-
-
+    //transformando em função
+    const lastTransactionEntries = getLastTransactionDate(transactions, 'positive')
+    const lastTransactionExpensives = getLastTransactionDate(transactions, 'negative')
+    const totalInterval = `01 a ${lastTransactionExpensives}`;
 /*     //testando funções JavaScript
     const plus = [1,2,4,6,50,70,5,9,41];
     console.log('vetor mais: ' + plus);
@@ -126,20 +128,24 @@ export function Dashboard() {
       entries: {
         amount: entriesTotal.toLocaleString('pt-BR', {
           style: 'currency',
-          currency: 'BRL'
-        })
+          currency: 'BRL',
+        }),
+        lastTransaction: `Última entrada dia ${lastTransactionEntries}`,
       },
       expensives:{
         amount: expensiveTotal.toLocaleString('pt-BR', {
           style: 'currency',
-          currency: 'BRL'
-        })
+          currency: 'BRL',
+        }),
+        lastTransaction: `Última entrada dia ${lastTransactionExpensives}`,
       },
       total: {
         amount: total.toLocaleString('pt-BR', {
           style: 'currency',
-          currency: 'BRL'
-        })
+          currency: 'BRL',
+          
+        }),
+        lastTransaction: totalInterval,
       }
     });
     //ver as lista atuais no console. console.log(transactionsFormatted)
@@ -198,21 +204,22 @@ export function Dashboard() {
             type='up'
             title='Entradas'
             amount={highLightData.entries.amount}
-            lastTransaction='Última entrada dia 13 de abril'
+            //adicionando datas. maiores e menores
+            lastTransaction={highLightData.entries.lastTransaction}
           />
 
           <HighlightCard
             type='down'
             title='Saídas'
             amount={highLightData.expensives.amount}
-            lastTransaction='Última saída dia 03 de abril'
+            lastTransaction={highLightData.expensives.lastTransaction}
           />
 
           <HighlightCard
             type='total'
             title='Total'
             amount={highLightData.total.amount}
-            lastTransaction='01 à 16 de abril'
+            lastTransaction={highLightData.total.lastTransaction}
           />
 
         </HighlightCards>
