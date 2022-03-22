@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { HistoryCard } from '../../components/HistoryCard';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
 Container,
@@ -8,6 +9,20 @@ Title
 } from './styles';
 
 export function Resume(){
+  //Função que puxa os dados assíncronos.
+  async function loadData() {
+    const dataKey = '@gofinances:transactions';
+    const response = await AsyncStorage.getItem(dataKey);
+    const responseFormatted = response ? JSON.parse(response) : [];
+
+    console.log(responseFormatted);
+  }
+
+  //Mostrar a função
+  useEffect(() => {
+    loadData();
+  }, []);
+
   return (
     <Container>
         <Header>
